@@ -1,4 +1,6 @@
 using locator.Infrastructure.EntityFramework;
+using locator.Infrastructure.Repositories;
+using locator.Infrastructure.Repositories.Interfaces;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -21,6 +23,9 @@ namespace locator.Web
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+
+            //All services for DI
+            services.AddScoped<ILocalizationRepository, LocalizationRepository>();
 
             services.AddDbContext<LocatorContext>(opts =>
                 opts.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"), 
