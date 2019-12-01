@@ -1,6 +1,10 @@
+using AutoMapper;
 using locator.Infrastructure.EntityFramework;
+using locator.Infrastructure.Mapper;
 using locator.Infrastructure.Repositories;
 using locator.Infrastructure.Repositories.Interfaces;
+using locator.Web.Services;
+using locator.Web.Services.Interfaces;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -26,11 +30,25 @@ namespace locator.Web
 
             //All services for DI
             services.AddScoped<ILocalizationRepository, LocalizationRepository>();
+            
+            //HttpClient for services which will need to send http requests
+            services.AddHttpClient<IIpStackService ,IpStackService>(); //also register IpStackService
 
+            //Database provider
             services.AddDbContext<LocatorContext>(opts =>
                 opts.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"), 
                 opts => opts.MigrationsAssembly("locator.Infrastructure"))
-            );
+            );            
+
+            //AutoMapper
+            var mappingConfig = new MapperConfiguration(mc => 
+            {
+                mc.AddProfile(new MappingProfile());
+            });
+            services.AddSingleton(mappingConfig.CreateMapper());
+
+            // services.AddMvc().AddViewComponentsAsServices();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

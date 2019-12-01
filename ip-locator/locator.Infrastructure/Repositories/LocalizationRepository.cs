@@ -17,32 +17,32 @@ namespace locator.Infrastructure.Repositories
             _context = context;
         }
 
-        public async Task<bool> Create(Localization localization)
+        public async Task<bool> CreateAsync(Localization localization)
         {
             await _context.Localizations.AddAsync(localization);
             return await _context.SaveChangesAsync() > 0;
         }
 
-        public async Task<Localization> Get(int id)
+        public async Task<Localization> GetAsync(int id)
         {
             return await _context.Localizations.FirstOrDefaultAsync(localization => localization.Id == id);
         }
 
-        public async Task<Localization> Get(string ip)
+        public async Task<Localization> GetAsync(string ip)
         {
             return await _context.Localizations.FirstOrDefaultAsync(localization => localization.Ip.Equals(ip));
         }
 
-        public async Task<IEnumerable<Localization>> GetAll()
+        public async Task<List<Localization>> GetAllAsync()
         {
             return await _context.Localizations.ToListAsync();
         }
 
-        public async Task<bool> Remove(int id)
+        public async Task<bool> RemoveAsync(int id)
         {
-            var localizationToRemove = await Get(id);
+            var localizationToRemove = await GetAsync(id);
             _context.Localizations.Remove(localizationToRemove);
-            
+
             return await _context.SaveChangesAsync() > 0;
         }
     }

@@ -6,10 +6,10 @@ namespace locator.Infrastructure.Repositories.Interfaces
 {
     public interface ILocalizationRepository
     {
-        Task<bool> Create(Localization localization);
-        Task<Localization> Get(int id);
-        Task<Localization> Get(string ip);
-        Task<IEnumerable<Localization>> GetAll();
-        Task<bool> Remove(int id);
+        Task<bool> CreateAsync(Localization localization);
+        Task<Localization> GetAsync(int id);
+        Task<Localization> GetAsync(string ip);
+        Task<List<Localization>> GetAllAsync();
+        Task<bool> RemoveAsync(int id);
     }
 }
