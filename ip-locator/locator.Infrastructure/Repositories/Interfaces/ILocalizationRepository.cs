@@ -10,6 +10,6 @@ namespace locator.Infrastructure.Repositories.Interfaces
         Task<Localization> GetAsync(int id);
         Task<Localization> GetAsync(string ip);
         Task<List<Localization>> GetAllAsync();
-        Task<bool> RemoveAsync(int id);
+        Task<bool> RemoveByIpAsync(string ip, bool removeAllRows);
     }
 }

@@ -23,7 +23,7 @@ namespace locator.Web.Controllers
             _ipService = ipService;
         }
 
-        [HttpGet("locate/{ip}")]
+        [HttpPost("locate/{ip}")]
         public async Task<LocalizationModel> LocateIp(string ip)
         {
             var localization = await _ipService.GetLocalizationByIpAsync(ip);
@@ -35,13 +35,23 @@ namespace locator.Web.Controllers
         public async Task<IActionResult> AllLocalizations()
         {
             var localizations = await _localizationRepository.GetAllAsync();
-
             if(!localizations.Any())
             {
                 return NotFound();
             }
 
             return Ok(_mapper.Map<List<LocalizationModel>>(localizations));
+        }
+
+        [HttpDelete("remove/{ip}")]
+        public async Task<IActionResult> RemoveLocation(string ip, bool removeAllRows = false)
+        {
+            var result = await _localizationRepository.RemoveByIpAsync(ip, removeAllRows);
+            if(!result)
+            {
+                return NotFound();
+            }
+            return StatusCode(202);
         }
     }
 }

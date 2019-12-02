@@ -33,15 +33,27 @@ namespace locator.Infrastructure.Repositories
             return await _context.Localizations.FirstOrDefaultAsync(localization => localization.Ip.Equals(ip));
         }
 
+        public async Task<List<Localization>> GetAllIpLocalizations(string ip)
+        {
+            return await _context.Localizations.Where(localization => localization.Ip.Equals(ip)).ToListAsync();
+        }
+
         public async Task<List<Localization>> GetAllAsync()
         {
             return await _context.Localizations.ToListAsync();
         }
 
-        public async Task<bool> RemoveAsync(int id)
+        public async Task<bool> RemoveByIpAsync(string ip, bool removeAllRows)
         {
-            var localizationToRemove = await GetAsync(id);
-            _context.Localizations.Remove(localizationToRemove);
+            var localizationToRemove = await GetAsync(ip);
+            if(removeAllRows)
+            {
+                var ipLocalizations = GetAllIpLocalizations(ip); 
+            }
+            else
+            {
+                _context.Localizations.Remove(localizationToRemove);
+            }
 
             return await _context.SaveChangesAsync() > 0;
         }
