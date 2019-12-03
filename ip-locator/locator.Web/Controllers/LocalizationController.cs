@@ -24,11 +24,16 @@ namespace locator.Web.Controllers
         }
 
         [HttpPost("locate/{ip}")]
-        public async Task<LocalizationModel> LocateIp(string ip)
+        public async Task<IActionResult> LocateIp(string ip)
         {
             var localization = await _ipService.GetLocalizationByIpAsync(ip);
+            if(localization == null)
+            {
+                return NotFound();
+            }
+
             await _localizationRepository.CreateAsync(localization);
-            return _mapper.Map<LocalizationModel>(localization);
+            return Ok(_mapper.Map<LocalizationModel>(localization));
         }
 
         [HttpGet("all-localizations")]
