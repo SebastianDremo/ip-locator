@@ -20,11 +20,6 @@ namespace locator.Web.Services
             _ipStackApiKey = _configuration.GetSection("IpStackKey").Value;
         }
 
-        public Task<Localization> GetLocalizationByDnsAsync(string dns)
-        {
-            throw new System.NotImplementedException();
-        }
-
         public async Task<Localization> GetLocalizationByIpAsync(string ip)
         {
             var url = $"http://api.ipstack.com/{ip}?access_key={_ipStackApiKey}&fields=ip,country_name,city,latitude,longitude";
