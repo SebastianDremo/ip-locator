@@ -31,12 +31,7 @@ namespace locator.Infrastructure.Repositories
         public async Task<Localization> GetAsync(string ip)
         {
             return await _context.Localizations.FirstOrDefaultAsync(localization => localization.Ip.Equals(ip));
-        }
-
-        public async Task<List<Localization>> GetAllIpLocalizations(string ip)
-        {
-            return await _context.Localizations.Where(localization => localization.Ip.Equals(ip)).ToListAsync();
-        }
+        }       
 
         public async Task<List<Localization>> GetAllAsync()
         {
@@ -48,7 +43,11 @@ namespace locator.Infrastructure.Repositories
             var localizationToRemove = await GetAsync(ip);
             if(removeAllRows)
             {
-                var ipLocalizations = GetAllIpLocalizations(ip); 
+                var ipLocalizations = await GetAllIpLocalizationsAsync(ip); 
+                foreach (var localization in ipLocalizations)
+                {
+                    _context.Localizations.Remove(localization);
+                };
             }
             else
             {
@@ -56,6 +55,11 @@ namespace locator.Infrastructure.Repositories
             }
 
             return await _context.SaveChangesAsync() > 0;
+        }
+
+         private async Task<List<Localization>> GetAllIpLocalizationsAsync(string ip)
+        {
+            return await _context.Localizations.Where(localization => localization.Ip.Equals(ip)).ToListAsync();
         }
     }
 }

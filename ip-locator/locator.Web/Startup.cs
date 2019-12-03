@@ -46,9 +46,6 @@ namespace locator.Web
                 mc.AddProfile(new MappingProfile());
             });
             services.AddSingleton(mappingConfig.CreateMapper());
-
-            // services.AddMvc().AddViewComponentsAsServices();
-
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

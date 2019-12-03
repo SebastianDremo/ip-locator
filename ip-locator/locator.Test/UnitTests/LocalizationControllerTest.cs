@@ -29,7 +29,6 @@ namespace locator.Test.UnitTests
             controller = new LocalizationController(mockLocalizationRepository.Object, mockMapper.Object, mockIpStackService.Object);
         }
 
-
         [TestCase("153.02.12.81")]
         public void LocateIp_Always_ReturnsModelObject(string ip)
         {
@@ -47,10 +46,10 @@ namespace locator.Test.UnitTests
             mockLocalizationRepository.Setup(repository => repository.CreateAsync(expectedLocalization)).ReturnsAsync(true);
             mockMapper.Setup(mapper => mapper.Map<LocalizationModel>(expectedLocalization)).Returns(expectedLocalizationModel);
 
-            var result = controller.LocateIp(ip).Result;
-
-            Assert.IsTrue(result.Ip.Equals(expectedLocalization.Ip));
+            var result = controller.LocateIp(ip).Result as ObjectResult;
+            Assert.IsInstanceOf<LocalizationModel>(result.Value);
         }
+
         [Test]
         public void AllLocalizations_WhenNoLocalizationsInDb_ReturnsNotFound()
         {

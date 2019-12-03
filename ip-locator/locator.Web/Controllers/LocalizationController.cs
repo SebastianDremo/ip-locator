@@ -27,11 +27,10 @@ namespace locator.Web.Controllers
         public async Task<IActionResult> LocateIp(string ip)
         {
             var localization = await _ipService.GetLocalizationByIpAsync(ip);
-            if(localization == null)
+            if(localization.Ip == null)
             {
-                return NotFound();
+                return StatusCode(500);
             }
-
             await _localizationRepository.CreateAsync(localization);
             return Ok(_mapper.Map<LocalizationModel>(localization));
         }
